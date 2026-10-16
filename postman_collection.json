@@ -1,0 +1,252 @@
+{
+  "info": {
+    "_postman_id": "7f8b9d3e-4a1b-4c2d-9e3f-8a1b2c3d4e5f",
+    "name": "Employee REST API",
+    "description": "Postman Collection for Employee REST API (Node.js & Express)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Retrieve Employees (Q1.1)",
+      "item": [
+        {
+          "name": "Get All Employees",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/employees",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees"]
+            },
+            "description": "Returns list of all employees."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Employee by ID (1)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/employees/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees", "1"]
+            },
+            "description": "Returns employee with ID 1."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Employee by Nonexistent ID (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/employees/999",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees", "999"]
+            },
+            "description": "Expects 404 Not Found error response."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Add an Employee (Q1.2)",
+      "item": [
+        {
+          "name": "Create Employee (Success)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sneha Rao\",\n  \"department\": \"Design\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/employees",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees"]
+            },
+            "description": "Creates an employee with unique ID and default Active status (201 Created)."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Employee - Validation Error (422)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"department\": \"Engineering\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/employees",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees"]
+            },
+            "description": "Rejects empty name and returns 422 Unprocessable Entity."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. Update and Filter Employees (Q1.3)",
+      "item": [
+        {
+          "name": "Update Status to Inactive",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Inactive\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/employees/1/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees", "1", "status"]
+            },
+            "description": "Updates employee 1 status to Inactive."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Status to Active",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/employees/3/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees", "3", "status"]
+            },
+            "description": "Updates employee 3 status to Active."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Status - Invalid Status (422)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Suspended\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/employees/1/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees", "1", "status"]
+            },
+            "description": "Rejects invalid status and returns 422 Unprocessable Entity."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Status - Nonexistent Employee (404)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/employees/999/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees", "999", "status"]
+            },
+            "description": "Returns 404 when employee does not exist."
+          },
+          "response": []
+        },
+        {
+          "name": "Filter Employees by Department (Engineering)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/employees?department=Engineering",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees"],
+              "query": [
+                {
+                  "key": "department",
+                  "value": "Engineering"
+                }
+              ]
+            },
+            "description": "Returns only employees belonging to Engineering."
+          },
+          "response": []
+        },
+        {
+          "name": "Filter Employees by Department (Case-insensitive)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/employees?department=engineering",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees"],
+              "query": [
+                {
+                  "key": "department",
+                  "value": "engineering"
+                }
+              ]
+            },
+            "description": "Filters department with case insensitivity."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
